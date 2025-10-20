@@ -1,0 +1,24 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Examples Folder - Reference Only
+
+⚠️ READ-ONLY DIRECTORY
+The /examples folder contains reference applications demonstrating proven patterns for Databricks integration.
+
+NEVER
+❌ Edit, modify, or delete ANY files in /examples
+❌ Copy-paste entire example files
+❌ Add new files to examples during development
+
+ALWAYS
+✅ Study patterns and structures
+✅ Adapt patterns to your needs (implement your own version)
+✅ Reference examples when building similar features
+
+Each example follows this consistent pattern:
+- app.py - Main application entry point
+- app.yaml - Configuration and settings
+- requirements.txt - Package dependencies

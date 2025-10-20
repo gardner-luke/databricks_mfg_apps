@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+---
+SIMPLICITY-FIRST APPS
+- Build minimally first. Start with one page only.
+- Include a sidebar placeholder but do not add additional pages until explicitly requested.
+- Use mock/synthetic data for any visuals or KPIs unless told otherwise.
+- No Databricks integrations unless explicitly requested.
+- Keep code structure small and readable; avoid unnecessary abstractions.
+- Follow subsequent prompts exactly when adding pages/features.

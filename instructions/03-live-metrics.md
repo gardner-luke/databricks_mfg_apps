@@ -1,6 +1,6 @@
 # 📈 Add Live Metrics to Dashboard
 
-Use the **Apps Cookbook – Read Tables** approach (no SQL in this prompt):  
+Use the **Apps Cookbook – Read Tables** approach:  
 https://apps-cookbook.dev/docs/streamlit/tables/tables_read
 
 **Placeholders (required):**
@@ -9,26 +9,22 @@ https://apps-cookbook.dev/docs/streamlit/tables/tables_read
 
 **Columns used:** `turbine_id`, `abnormal_sensor`, `hourly_timestamp`, `state`, `location`
 
-**Home page – simple spec:**
-- If placeholders aren’t set, show inputs for `<UC_TABLE>` and `<WAREHOUSE_ID>`.
-- Read data via the Cookbook method.
+**Goal for the timeline:**
+- Show **one line per `state`**.
+- X-axis: **`hourly_timestamp`** (hour granularity) for the selected day.
+- Y-axis: **OK%** = *count of rows with `abnormal_sensor = 'ok'`* ÷ *total rows* **for that state+hour**.
+- Do **not** create separate series for sensor types or statuses—**one series per state only**.
+- Include a simple **state multi-select** (all selected by default).
 
-**Point-in-time KPIs (for the selected day):**
-- First **dedupe to one record per `turbine_id`** using the **max `hourly_timestamp`** within that day.
+**KPIs:**
+- Deduplicate to the **latest record per `turbine_id`** within the day.
 - **AUM** = distinct `turbine_id`
 - **OK Turbines** = `abnormal_sensor = 'ok'`
 - **OK %** = OK / AUM
 
-**Charts:**
-1) **Timeline (hourly)** – **OK % vs Not-OK % by `state`** for the selected day  
-   - Group by `state` and `hourly_timestamp` (hour granularity).  
-   - Compute % from counts of `abnormal_sensor` (`ok` vs `not ok`).  
-   - Include a simple **state multi-select** (all states selected by default).
+**Bar chart:**
+- From the **deduped** set, **count by `location`** (top 10 + “Other”).
 
-2) **Bar chart: Turbines by `location`**  
-   - Use the **deduped latest** records for the selected day.  
-   - Show count by `location`
-
-**Structure:**  
-- Keep Streamlit’s built-in multipage setup; only the **Home** page is used here.  
-- Keep everything minimal; follow the Cookbook connection pattern exactly.
+**Simplicity & structure:**
+- Keep Streamlit’s built-in multipage setup; only the **Home** page is used here.
+- Follow the Cookbook connection method exactly.

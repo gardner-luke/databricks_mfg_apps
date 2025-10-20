@@ -19,7 +19,7 @@ Create a minimal, single-page Streamlit app to be deployed via **Databricks Apps
 **Files to Create in `/field-service-app`**  
 - `app.py` — sets global page config (`page_title`, icon, `layout="wide"`) and shows a welcome header.  
 - `pages/1_🏠_Home.py` — renders the mock KPIs + one trend chart (synthetic data only).  
-- `requirements.txt` — only `streamlit`.  
+- `requirements.txt` — only `streamlit`, `databricks-sdk`, `databricks-sql-connector`.  
 - `app.yaml` — minimal Databricks Apps manifest.
 
 **Resources**  

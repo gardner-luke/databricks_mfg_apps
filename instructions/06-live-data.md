@@ -2,52 +2,65 @@
 
 **Goal:** Replace all mock data with live Databricks queries.
 
-**Use values from `config.yaml` for catalog, schema, and warehouse_id.**
+---
+
+**Load configuration from `config.yaml`:**
+```python
+import yaml
+from pathlib import Path
+
+config_path = Path(__file__).parent.parent / "config.yaml"
+with open(config_path) as f:
+    config = yaml.safe_load(f)
+
+WAREHOUSE_ID = config["warehouse_id"]
+CATALOG = config["catalog"]
+SCHEMA = config["schema"]
+```
+
+Add `pyyaml` to `requirements.txt`.
 
 ---
 
 **Tables:**
 
-**`turbines_metadata`** — turbine info and status
-```
-turbine_id, latitude, longitude, model, status, last_maintenance
-```
-
-**`turbine_telemetry`** — time-series power data
-```
-timestamp, turbine_id, power_output_mw, expected_output_mw, wind_speed_mps, vibration_level
-```
+- `turbines_metadata` — `turbine_id, latitude, longitude, model, status, last_maintenance`
+- `turbine_telemetry` — `timestamp, turbine_id, power_output_mw, expected_output_mw, wind_speed_mps, vibration_level`
 
 ---
 
-**Update KPIs (from `turbines_metadata`):**
-- **Devices under Management** = COUNT(DISTINCT turbine_id)
-- **Maintenance Required** = COUNT WHERE status IN ('Error', 'Warning')
-- **Healthy Turbine %** = (COUNT WHERE status = 'Active') / total * 100
-- **Current Energy Production** = SUM of latest power_output_mw from telemetry
+**Create cached query functions with `@st.cache_data(ttl=60)`:**
+
+1. `get_turbines_metadata()` — `SELECT * FROM {CATALOG}.{SCHEMA}.turbines_metadata`
+
+2. `get_telemetry()` — `SELECT timestamp, turbine_id, power_output_mw, expected_output_mw FROM {CATALOG}.{SCHEMA}.turbine_telemetry ORDER BY timestamp`
+   - **Important:** Convert timestamp with `df['timestamp'] = pd.to_datetime(df['timestamp'])`
+
+3. `get_kpis()` — Returns dict with:
+   - `total_devices` = `COUNT(DISTINCT turbine_id)`
+   - `maintenance_required` = `COUNT WHERE status IN ('Error', 'Warning')`
+   - `healthy_pct` = `100 * COUNT(status='Active') / total`
+   - `current_output` = `SUM` of latest `power_output_mw` per turbine (use `ROW_NUMBER()` window function)
 
 ---
 
-**Update Chart (from `turbine_telemetry`):**
-- Query last 24 hours of data
-- Group by timestamp, SUM power_output_mw as "Real Output"
-- Group by timestamp, SUM expected_output_mw as "Expectation"
+**Update Chart:**
+- Group telemetry by timestamp, SUM `power_output_mw` and `expected_output_mw`
+- **Sort by timestamp** before plotting
+- Plot as two lines: Real Output (purple) and Expectation (green dashed)
 
 ---
 
-**Update Map (from `turbines_metadata`):**
-- Plot each turbine using latitude/longitude
-- Color markers by status: Active=green, Warning=yellow, Error=red
+**Update Map:**
+- Use `latitude`/`longitude` from metadata
+- Color by status: Active=green, Warning=yellow, Error=red
 
 ---
 
 **Update GenAI Summary:**
-- Keep the static text for now (GenAI integration is a future step)
-- Update turbine IDs to match actual data
+- Pull actual turbine IDs from metadata for error/warning turbines
+- Keep static analysis text
 
 ---
 
-**Add caching:** Use `@st.cache_data(ttl=60)` on query functions.
-
-**Expected Result:** A fully live dashboard pulling real data from Databricks Unity Catalog.
-
+**Error handling:** Wrap data loading in try/except, show `st.error()` if connection fails.

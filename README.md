@@ -1,6 +1,6 @@
 # Databricks Manufacturing Apps - Vibe Coding Template
 
-A template framework for building Streamlit applications on Databricks Apps using AI-assisted development with structured prompts.
+cd A template framework for building Streamlit applications on Databricks Apps using AI-assisted development with structured prompts.
 
 ## 🤔 What is This?
 
@@ -10,15 +10,19 @@ This is a **vibe coding template** that demonstrates how to use structured promp
 
 ```
 databricks_mfg_apps/
+├── wind-farm-app/         # Streamlit app for Cool Electric Co.
+│   ├── app.py             # Main application
+│   ├── requirements.txt   # Python dependencies
+│   └── app.yaml           # Databricks Apps config
 ├── fsa_env_setup/         # Databricks Asset Bundle for data setup
 │   ├── data/              # CSV files to load
 │   ├── src/               # Notebooks (load data, create app)
 │   └── resources/         # Job definitions
 └── instructions/          # Vibe coding prompts for AI assistants
-    ├── 01-base-app.md
-    ├── 02-databricks-integration.md
-    ├── 03-live-metrics.md
-    └── 04-recreate-field-service-assistant.md
+    ├── 01-app-setup.md
+    ├── 02-kpi-cards.md
+    ├── 03-power-chart.md
+    └── ...
 ```
 
 ## 🚀 How to Use

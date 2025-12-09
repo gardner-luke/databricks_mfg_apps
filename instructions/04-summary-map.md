@@ -4,17 +4,17 @@
 
 **GenAI Summary Panel (left column, above the chart):**
 
-Card with orange "GenAI Summary" header (with sparkles icon ✨).
+Use `st.container(border=True)` with individual `st.markdown()` calls for each line (do NOT use nested HTML - it won't render correctly).
 
-**Power output analysis** section:
+- Orange "✨ GenAI Summary" header (use inline HTML only for the header styling)
+- **Power output analysis** section label (bold)
 - ⚡ "Drop in overall output from 21:00 (last night) to now"
 - 📈 "Power output is stable at ~75 MW post-drop."
-
-**Turbine analysis** section:
+- **Turbine analysis** section label (bold)
 - 🔴 "A1234 shut off at 21:00"
 - 🟡 "C7890 requires verification of binding device"
 
-**Orange button:** "Continue the conversation" at the bottom.
+**Orange button:** Use `st.button()` with `type="primary"`. Add custom CSS to make primary buttons orange (#F97316).
 
 ---
 

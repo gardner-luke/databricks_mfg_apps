@@ -14,7 +14,7 @@ databricks_mfg_apps/
 ├── setup_data.py            # Script to deploy data using config.yaml
 ├── fsa_env_setup/           # Databricks Asset Bundle for data setup
 │   ├── data/                # Sample CSV files (turbine metadata & telemetry)
-│   ├── src/                 # Notebooks (load_data.py, create_app.py)
+│   ├── src/                 # Notebooks (load_data.py)
 │   └── resources/           # Job definitions
 └── instructions/            # Vibe coding prompts for AI assistants
     ├── 01-app-setup.md      # Create basic Streamlit app structure
@@ -27,14 +27,26 @@ databricks_mfg_apps/
 
 ## 🚀 How to Use
 
+### 0. Prerequisites
+
+Before you begin, ensure you have the following:
+
+1. **Databricks CLI installed and authenticated**:
+   - Follow the [official tutorial](https://docs.databricks.com/aws/en/dev-tools/cli/tutorial) to install and set up the Databricks CLI.
+   - **Note:** Ensure your CLI is correctly authenticated (`databricks auth login`) and targeted to your workspace.
+2. **Databricks Permissions**:
+   - Access to an existing **Catalog** (or permission to create one).
+   - Access to a **Schema** (or permission to create one).
+   - A **SQL Warehouse** available for use (you will need its ID).
+
 ### 1. Configure Environment
 
 Edit `config.yaml` with your Databricks settings:
 
 ```yaml
-catalog: "your_catalog"
-schema: "your_schema"
-warehouse_id: "your_warehouse_id"
+catalog: "CATALOG_NAME"
+schema: "SCHEMA_NAME"
+warehouse_id: "WAREHOUSE_ID"
 ```
 
 ### 2. Set Up Data
@@ -45,14 +57,37 @@ Run the setup script to deploy the sample data to your Databricks environment:
 python setup_data.py
 ```
 
-This script reads your configuration and runs the Databricks Asset Bundle to create tables.
+This script reads your configuration and runs the Databricks Asset Bundle to create tables. **Once the script completes successfully and you see the data in your catalog, you are ready to proceed to the next step.**
 
 ### 3. Build the App with AI
 
-Tag each instruction file in your AI assistant (Cursor) sequentially:
+Use the **Cursor Agent** to build the application. In the Chat window, ensure you are using the "Agent" mode (or "Composer" with Agent capabilities) so it can execute terminal commands and create files.
+
+**How to "Tag" Files:**
+To provide instructions to the AI, type `@` followed by the filename (e.g., `@01-app-setup.md`) in the chat input. This gives the AI the specific context it needs for that step. You may also drag and drop the files from your explorer into the Cursor Chat window.
+
+Run the following prompts sequentially in the Agent chat:
+
+**1. Initialize the App:**
 
 ```bash
 @instructions/01-app-setup.md    # Creates wind-farm-app/ with basic structure
+```
+
+**✨ Verify it works:**
+After this first step is complete, you can start the app to see your progress:
+
+```bash
+cd wind-farm-app
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+*Tip: Keep the app running in your terminal. As you apply the next steps, just refresh your browser to see the changes.*
+
+**2. Add Features:**
+
+```bash
 @instructions/02-kpi-cards.md    # Adds 4 KPI metric cards
 @instructions/03-power-chart.md  # Adds power output line chart
 @instructions/04-summary-map.md  # Adds GenAI summary panel & map

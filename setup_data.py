@@ -25,13 +25,44 @@ def load_config(config_path="config.yaml"):
         print(f"Error: {config_path} not found.")
         sys.exit(1)
 
-def run_command(cmd, cwd=None):
+def run_command(cmd, cwd=None, suppress_output=False):
     print(f"Running: {' '.join(cmd)}")
-    try:
-        subprocess.run(cmd, cwd=cwd, check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"Command failed with exit code {e.returncode}")
-        sys.exit(e.returncode)
+    
+    if suppress_output:
+        print("Job is running... This may take a minute or two.", flush=True)
+
+    if suppress_output:
+        # Capture output, but print URLs if found
+        process = subprocess.Popen(
+            cmd,
+            cwd=cwd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT, # Merge stderr into stdout
+            text=True,
+            bufsize=1
+        )
+        
+        full_output = []
+        for line in process.stdout:
+            full_output.append(line)
+            # Check for URLs in the output
+            if "https://" in line or "View run" in line:
+                print(line.strip())
+        
+        process.wait()
+        
+        if process.returncode == 0:
+            print("SUCCESS")
+        else:
+            print(f"Command failed with exit code {process.returncode}")
+            print("".join(full_output))
+            sys.exit(process.returncode)
+    else:
+        try:
+            subprocess.run(cmd, cwd=cwd, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Command failed with exit code {e.returncode}")
+            sys.exit(e.returncode)
 
 def main():
     config = load_config()
@@ -66,9 +97,9 @@ def main():
         "databricks", "bundle", "run", "load_data_job",
         "--var", f"catalog={catalog}",
         "--var", f"schema={schema}"
-    ], cwd=bundle_dir)
+    ], cwd=bundle_dir, suppress_output=True)
     
-    print("\n✅ Data setup complete!")
+    print("\n✅ Data setup complete! You are ready to proceed to Step 3: Build the App with AI.")
 
 if __name__ == "__main__":
     main()

@@ -6,6 +6,10 @@ A template framework for building Streamlit applications on Databricks Apps usin
 
 This is a **vibe coding template** that demonstrates how to use structured prompts with AI coding assistants (like Cursor) to rapidly build data-driven Streamlit applications. The `instructions/` folder contains carefully crafted prompts that guide AI to build a complete wind farm monitoring dashboard incrementally.
 
+<div align="center">
+  <img src="assets/images/FieldServiceAssistant.png" width="800" alt="Field Service Assistant">
+</div>
+
 ## 📁 Repository Structure
 
 ```

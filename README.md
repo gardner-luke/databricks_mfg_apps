@@ -53,6 +53,8 @@ schema: "SCHEMA_NAME"
 warehouse_id: "WAREHOUSE_ID"
 ```
 
+> **💡 Tip:** Use only letters, numbers, and underscores in your catalog and schema names (e.g., `my_catalog`, `wind_farm_schema`). Avoid dashes or special characters to prevent SQL identifier issues.
+
 ### 2. Set Up Data
 
 Run the setup script to deploy the sample data to your Databricks environment:

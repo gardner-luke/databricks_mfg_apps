@@ -9,6 +9,8 @@
 - Text input for table name (default from config.yaml)
 - "Test Connection" button
 
+**Important:** When building the table name from config.yaml, wrap identifiers in backticks if they contain dashes or special characters (e.g., `catalog.`schema-name`.table`). Create a helper function to handle this.
+
 **Connection pattern:**
 
 ```python

@@ -16,6 +16,15 @@ print(f"Target location: {catalog}.{schema}")
 
 # COMMAND ----------
 
+# Create catalog and schema if they don't exist
+spark.sql(f"CREATE CATALOG IF NOT EXISTS `{catalog}`")
+print(f"Catalog '{catalog}' ready")
+
+spark.sql(f"CREATE SCHEMA IF NOT EXISTS `{catalog}`.`{schema}`")
+print(f"Schema '{catalog}.{schema}' ready")
+
+# COMMAND ----------
+
 # Find all CSV files in the data folder
 import os
 import pandas as pd

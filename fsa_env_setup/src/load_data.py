@@ -16,6 +16,15 @@ print(f"Target location: {catalog}.{schema}")
 
 # COMMAND ----------
 
+# Create catalog and schema if they don't exist
+spark.sql(f"CREATE CATALOG IF NOT EXISTS `{catalog}`")
+print(f"Catalog '{catalog}' ready")
+
+spark.sql(f"CREATE SCHEMA IF NOT EXISTS `{catalog}`.`{schema}`")
+print(f"Schema '{catalog}.{schema}' ready")
+
+# COMMAND ----------
+
 # Find all CSV files in the data folder
 import os
 import pandas as pd
@@ -35,7 +44,7 @@ print(f"Found {len(csv_files)} CSV files: {csv_files}")
 for csv_file in csv_files:
     csv_path = f"{data_folder}/{csv_file}"
     table_name_base = csv_file.replace('.csv', '')
-    table_name = f"{catalog}.{schema}.{table_name_base}"
+    table_name = f"`{catalog}`.`{schema}`.`{table_name_base}`"
     
     print(f"\n--- Loading: {csv_file} -> {table_name} ---")
     
@@ -56,6 +65,6 @@ for csv_file in csv_files:
 print("\n=== Tables Created ===")
 for csv_file in csv_files:
     table_name_base = csv_file.replace('.csv', '')
-    table_name = f"{catalog}.{schema}.{table_name_base}"
+    table_name = f"`{catalog}`.`{schema}`.`{table_name_base}`"
     count = spark.sql(f"SELECT COUNT(*) as cnt FROM {table_name}").collect()[0].cnt
     print(f"  {table_name}: {count} rows")

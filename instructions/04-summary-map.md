@@ -14,10 +14,6 @@ Use `st.container(border=True)` with individual `st.markdown()` calls for each l
 - 🔴 "A1234 shut off at 21:00"
 - 🟡 "C7890 requires verification of binding device"
 
-**Orange button:** Use `st.button()` with `type="primary"`. Add custom CSS to make primary buttons orange (#F97316).
-
----
-
 **Map of Turbines (full width, below the two-column section):**
 
 Use `st.map()` or Plotly with these turbine locations near Nantucket:
